@@ -1,0 +1,114 @@
+.container {
+  border-radius: 30px;
+  background: var(--component-background);
+  padding: 20px 18px 40px;
+  max-width: 335px;
+}
+
+.form {
+  margin-top: 40px;
+}
+
+.title {
+  color: var(--foreground);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  margin-bottom: 20px;
+}
+
+.span {
+  color: var(--border);
+}
+
+.inputContainer {
+  position: relative;
+}
+
+.inputContainer:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.inputContainer span {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  color: var(--no-active);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: -0.02em;
+}
+
+.input {
+  width: 100%;
+  border-radius: 12px;
+  background: var(--input-background);
+  padding: 14px 0;
+  padding-left: 74px;
+  color: var(--foreground);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: -0.02em;
+  border: none;
+  outline: none;
+}
+
+.name {
+  padding-left: 54px;
+}
+
+.email {
+  padding-left: 52px;
+}
+
+.passwordContainer {
+  position: relative;
+}
+
+.passwordShow {
+  border: none;
+  background: inherit;
+  position: absolute;
+  right: 14px;
+  top: 14px;
+}
+
+.buttonContainer {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.button {
+  display: flex;
+  padding: 12px 30px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  background: var(--foreground);
+  color: var(--component-background);
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: 0.02em;
+}
+
+.link {
+  color: var(--no-active);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  text-decoration-line: underline;
+  text-decoration-skip-ink: none;
+  text-underline-position: from-font;
+}
