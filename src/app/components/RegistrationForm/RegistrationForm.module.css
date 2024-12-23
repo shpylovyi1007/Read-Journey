@@ -2,7 +2,6 @@
   border-radius: 30px;
   background: var(--component-background);
   padding: 20px 18px 40px;
-  max-width: 335px;
 }
 
 .form {
@@ -89,6 +88,10 @@
   gap: 14px;
 }
 
+.buttonContainerLogin {
+  margin-top: 72px;
+}
+
 .button {
   display: flex;
   padding: 12px 30px;
@@ -102,8 +105,14 @@
   letter-spacing: 0.02em;
 }
 
+.buttonLogin {
+  padding: 12px 45px;
+}
+
 .link {
   color: var(--no-active);
+  background: inherit;
+  border: none;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.16;

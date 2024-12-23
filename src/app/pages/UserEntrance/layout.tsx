@@ -11,7 +11,7 @@ export default function UserEntrance({
       {children}
       <div className={css.containerImg}>
         <Image
-          src="/images/iPhoneDekstop.png"
+          src="/images/iPhone15.png"
           alt="IPhone"
           width={1440}
           height={800}
@@ -21,7 +21,7 @@ export default function UserEntrance({
         />
 
         <Image
-          src="/images/iPhoneMobile.png"
+          src="/images/iPhone15.png"
           alt="IPhone"
           width={255}
           height={518}
