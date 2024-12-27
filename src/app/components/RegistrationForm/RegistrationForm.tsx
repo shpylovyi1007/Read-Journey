@@ -32,7 +32,7 @@ interface FormData {
   password: string;
 }
 
-interface Actions {
+interface ActionsRegister {
   resetForm: () => void;
 }
 
@@ -50,7 +50,7 @@ export default function RegistrationForm({ onToggleForm }: FormProps) {
     password: "",
   };
 
-  const handleSubmit = (values: FormData, actions: Actions) => {
+  const handleSubmit = (values: FormData, actions: ActionsRegister) => {
     dispatch(register(values));
     actions.resetForm();
   };

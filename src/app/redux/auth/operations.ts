@@ -3,14 +3,28 @@ import axios from "axios";
 
 axios.defaults.baseURL = "https://readjourney.b.goit.study/api";
 
-// "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmFiNTUyNTkxNDk2NGI0YThiYjBlYSIsImlhdCI6MTczNTA0NjQ4MiwiZXhwIjoxNzM1MDUwMDgyfQ.5MnXDohNercAoq48TItTn0h_xAPeb0zBvmCI2pDTwKw",
-//   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NmFiNTUyNTkxNDk2NGI0YThiYjBlYSIsImlhdCI6MTczNTA0NjQ4MiwiZXhwIjoxNzM1NjUxMjgyfQ.c9OSER0JibbAGCIp8q3EpxRa7gDaF0vutxz-_3atoNY"
-
 interface RegisterData {
   name: string;
   email: string;
   password: string;
 }
+
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+type UserToken = {
+  token: string;
+};
+
+const setAuthHeaders = (token: UserToken) => {
+  axios.defaults.headers.common["Authorization"] = `Baerer ${token}`;
+};
+
+const clearAuthHeaders = () => {
+  axios.defaults.headers.common["Authorization"] = "";
+};
 
 export const register = createAsyncThunk(
   "/auth/register",
@@ -29,7 +43,7 @@ export const register = createAsyncThunk(
 
 export const login = createAsyncThunk(
   "/auth/login",
-  async (values, thunkAPI) => {
+  async (values: LoginData, thunkAPI) => {
     try {
       const response = await axios.post("/users/signin", values);
       return response.data;
@@ -39,5 +53,29 @@ export const login = createAsyncThunk(
       }
       return thunkAPI.rejectWithValue("An unexpected error occurred");
     }
+  }
+);
+
+export const logout = createAsyncThunk("/auth/logout", async (_, thunkAPI) => {
+  try {
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+    return thunkAPI.rejectWithValue("An unexpected error occurred");
+  }
+});
+
+export const refrefhUser = createAsyncThunk(
+  "/auth/refresh",
+  async (_, thunkAPI) => {
+    const reduxState = thunkAPI.getState();
+    const saveToken = reduxState.auth.token;
+    setAuthHeaders(saveToken);
+    const response = await axios.get("/users/current");
+  },
+
+  {
+    condition: () => {},
   }
 );

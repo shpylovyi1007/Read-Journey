@@ -1,13 +1,33 @@
 "use client";
 
 import clsx from "clsx";
-import * as React from "react";
-import { useForm } from "react-hook-form";
+import * as Yup from "yup";
 import css from "../RegistrationForm/RegistrationForm.module.css";
+import { useState } from "react";
+import { useAppDispatch } from "@/app/hooks";
+import { login } from "@/app/redux/auth/operations";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+    )
+    .required("Password is required"),
+});
 
 interface FormData {
   email: string;
   password: string;
+}
+
+interface ActionsLogin {
+  resetForm: () => void;
 }
 
 export interface FormProps {
@@ -15,103 +35,96 @@ export interface FormProps {
 }
 
 export default function LoginForm({ onToggleForm }: FormProps) {
-  const [passwordShow, setPasswordShow] = React.useState(false);
+  const dispatch = useAppDispatch();
+
+  const [passwordShow, setPasswordShow] = useState(false);
 
   const handlePasswordShow = () => {
     setPasswordShow((prev) => !prev);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const initialValues: FormData = {
+    email: "",
+    password: "",
+  };
+
+  const handleSubmit = (values: FormData, actions: ActionsLogin) => {
+    dispatch(login(values));
+    actions.resetForm();
+  };
   return (
     <div className={css.container}>
       <svg width={42} height={17}>
         <use href="./symbol-defs.svg#frame"></use>
       </svg>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form className={css.form}>
+          <h1 className={css.title}>
+            Expand your mind, reading <span className={css.span}>a book</span>
+          </h1>
 
-      <form className={css.form} onSubmit={onSubmit}>
-        <h1 className={css.title}>
-          Expand your mind, reading <span className={css.span}>a book</span>
-        </h1>
+          <div className={css.inputContainer}>
+            <label className={css.label} htmlFor="email">
+              Email:
+            </label>
+            <Field
+              className={clsx(css.input, css.email)}
+              id="email"
+              name="email"
+              type="email"
+            />
+            <ErrorMessage name="email" component="span" />
+          </div>
 
-        <div className={css.inputContainer}>
-          <label className={css.label} htmlFor="email">
-            Email:
-          </label>
-          <input
-            className={clsx(css.input, css.email)}
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-            })}
-            id="email"
-            type="email"
-          />
-          {errors.email && <span>{errors.email.message}</span>}
-        </div>
+          <div className={clsx(css.inputContainer, css.passwordContainer)}>
+            <label className={css.label} htmlFor="password">
+              Password:
+            </label>
+            <Field
+              className={css.input}
+              id="password"
+              name="password"
+              type={passwordShow ? "text" : "password"}
+            />
+            <ErrorMessage name="password" component="span" />
 
-        <div className={clsx(css.inputContainer, css.passwordContainer)}>
-          <label className={css.label} htmlFor="password">
-            Password:
-          </label>
-          <input
-            className={css.input}
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters",
-              },
-              pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                message:
-                  "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-              },
-            })}
-            id="password"
-            type={passwordShow ? "text" : "password"}
-          />
-          {errors.password && <span>{errors.password.message}</span>}
+            <button
+              className={css.passwordShow}
+              type="button"
+              onClick={handlePasswordShow}
+            >
+              {passwordShow ? (
+                <svg width={20} height={20}>
+                  <use href="/symbol-defs.svg#eye"></use>
+                </svg>
+              ) : (
+                <svg width={20} height={20}>
+                  <use href="/symbol-defs.svg#eye-off"></use>
+                </svg>
+              )}
+            </button>
+          </div>
 
-          <button
-            className={css.passwordShow}
-            type="button"
-            onClick={handlePasswordShow}
-          >
-            {passwordShow ? (
-              <svg width={20} height={20}>
-                <use href="/symbol-defs.svg#eye"></use>
-              </svg>
-            ) : (
-              <svg width={20} height={20}>
-                <use href="/symbol-defs.svg#eye-off"></use>
-              </svg>
-            )}
-          </button>
-        </div>
-
-        <div className={clsx(css.buttonContainer, css.buttonContainerLogin)}>
-          <button className={clsx(css.button, css.buttonLogin)} type="submit">
-            Log in
-          </button>
-          <button
-            className={css.link}
-            onClick={(e) => {
-              e.preventDefault();
-              onToggleForm();
-            }}
-          >
-            Don&#39;t have an account?
-          </button>
-        </div>
-      </form>
+          <div className={clsx(css.buttonContainer, css.buttonContainerLogin)}>
+            <button className={clsx(css.button, css.buttonLogin)} type="submit">
+              Log in
+            </button>
+            <button
+              className={css.link}
+              onClick={(e) => {
+                e.preventDefault();
+                onToggleForm();
+              }}
+            >
+              Don&#39;t have an account?
+            </button>
+          </div>
+        </Form>
+      </Formik>
     </div>
   );
 }
