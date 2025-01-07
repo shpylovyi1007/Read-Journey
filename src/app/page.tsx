@@ -1,27 +1,25 @@
+"use client";
+
 import { useEffect } from "react";
-import Entrance from "./pages/UserEntrance/page";
-import { useAppDispatch } from "./hooks";
+import Entrance from "./userEntrance/page";
+import { useAppDispatch, useAppSelector } from "./hooks";
 import { refrefhUser } from "./redux/auth/operations";
-// import { selectIsRefreshing } from "./redux/auth/selectors";
+import { selectIsRefreshing } from "./redux/auth/selectors";
+import RestrictedRoute from "./components/RestrictedRoute";
 
 export default function Home() {
-  // const isRefreshing = useAppSelector(selectIsRefreshing);
+  const isRefreshing = useAppSelector(selectIsRefreshing);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(refrefhUser());
   }, [dispatch]);
 
-  // return isRefreshing ? (
-  //   <div>Loader</div>
-  // ) : (
-  //   <div>
-  //     <Entrance />
-  //   </div>
-  // );
-  return (
+  return isRefreshing ? (
+    <div>Loader</div>
+  ) : (
     <div>
-      <Entrance />
+      <RestrictedRoute component={<Entrance />} />
     </div>
   );
 }

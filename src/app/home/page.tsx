@@ -1,6 +1,6 @@
 import Header from "@/app/components/Header/Header";
 
-export default function page() {
+export default function Home() {
   return (
     <div>
       <Header />

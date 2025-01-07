@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { selectIsLoggedIn } from "../redux/auth/selectors";
 
-export default function RestrictedRoute({
+export default function PrivateRoute({
   component,
 }: {
   component: React.ReactNode;
@@ -14,10 +14,10 @@ export default function RestrictedRoute({
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      router.push("/home");
+    if (!isLoggedIn) {
+      router.push("/");
     }
   }, [isLoggedIn, router]);
 
-  return !isLoggedIn ? component : null;
+  return isLoggedIn ? component : null;
 }

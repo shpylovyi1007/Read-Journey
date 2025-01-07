@@ -2,8 +2,8 @@
 
 import RegistrationForm from "@/app/components/RegistrationForm/RegistrationForm";
 import { useState } from "react";
-import UserEntrance from "./layout";
 import LoginForm from "@/app/components/LoginForm/LoginForm";
+import UserEntrance from "./layout";
 
 export default function Entrance() {
   const [newUser, setNewUser] = useState(false);

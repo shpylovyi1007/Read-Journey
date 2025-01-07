@@ -9,6 +9,7 @@ export interface User {
 export interface AuthState {
   user: User;
   token: string | null;
+  refreshToken: string | null;
   isLoggedIn: boolean;
   isRefreshing: boolean;
 }
@@ -19,6 +20,7 @@ const initialState: AuthState = {
     email: null,
   },
   token: null,
+  refreshToken: null,
   isLoggedIn: false,
   isRefreshing: false,
 };
@@ -40,6 +42,7 @@ const authSlice = createSlice({
         state.user.email = action.payload.email;
         state.token = action.payload.token;
         state.isLoggedIn = true;
+        console.log(`login ${state.user.name}`);
       })
       .addCase(logout.fulfilled, (state) => {
         state.user.name = null;
@@ -55,6 +58,7 @@ const authSlice = createSlice({
         state.user.email = action.payload.email;
         state.isLoggedIn = true;
         state.isRefreshing = false;
+        console.log(`refresh ${state.user.name}`);
       });
   },
 });

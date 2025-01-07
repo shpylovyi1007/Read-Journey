@@ -45,6 +45,7 @@ export const login = createAsyncThunk(
     try {
       const response = await axios.post("/users/signin", values);
       setAuthHeaders(response.data.token);
+
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -71,20 +72,23 @@ export const refrefhUser = createAsyncThunk(
   "/auth/refresh",
   async (_, thunkAPI) => {
     const reduxState = thunkAPI.getState() as RootState;
-    const saveToken = reduxState.auth.token;
+    const saveToken = reduxState.auth.refreshToken;
 
     if (!saveToken) {
       return thunkAPI.rejectWithValue("Немає токену");
     }
 
     setAuthHeaders(saveToken);
-    const response = await axios.get("/users/current");
+    const response = await axios.get("/users/current/refresh");
+
+    console.log(response.data);
+
     return response.data;
   },
   {
     condition: (_, { getState }) => {
       const reduxState = getState() as RootState;
-      const savedToken = reduxState.auth.token;
+      const savedToken = reduxState.auth.refreshToken;
       return savedToken !== null;
     },
   }
