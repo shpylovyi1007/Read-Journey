@@ -105,6 +105,11 @@
   letter-spacing: 0.02em;
 }
 
+.button:hover {
+  color: var(--foreground);
+  background: var(--main-background);
+}
+
 .buttonLogin {
   padding: 12px 45px;
 }

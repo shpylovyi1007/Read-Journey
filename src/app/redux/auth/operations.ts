@@ -16,7 +16,7 @@ interface LoginData {
 }
 
 const setAuthHeaders = (token: string) => {
-  axios.defaults.headers.common["Authorization"] = `Baerer ${token}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
 const clearAuthHeaders = () => {
@@ -58,6 +58,15 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk("/auth/logout", async (_, thunkAPI) => {
   try {
+    const state = thunkAPI.getState() as RootState;
+    const token = state.auth.token;
+
+    if (!token) {
+      return thunkAPI.rejectWithValue("No token available");
+    }
+
+    setAuthHeaders(token);
+
     await axios.post("/users/signout");
     clearAuthHeaders();
   } catch (error) {
