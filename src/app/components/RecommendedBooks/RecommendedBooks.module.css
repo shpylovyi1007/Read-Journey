@@ -1,0 +1,50 @@
+.container {
+  border-radius: 30px;
+  background: var(--component-background);
+  padding: 40px 20px;
+  margin-top: 10px;
+}
+
+.title {
+  color: var(--foreground);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+
+.list {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.item {
+  width: calc((100% - 20px) / 2);
+}
+
+.button {
+  text-align: start;
+}
+
+.image {
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.bookTitle {
+  color: var(--foreground);
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+
+.author {
+  color: var(--no-active);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}

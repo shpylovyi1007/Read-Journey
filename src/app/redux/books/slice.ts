@@ -1,12 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { getBooks } from "./operations";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  // інші поля книги...
-}
+import { Book, getBooks } from "./operations";
 
 interface BooksState {
   items: Book[];
@@ -52,9 +45,9 @@ const booksSlice = createSlice({
           });
         }
       )
-      .addCase(getBooks.rejected, (state, action) => {
+      .addCase(getBooks.rejected, (state) => {
         state.loading = false;
-        state.error = action.payload || "Something went wrong";
+        state.error = "Something went wrong";
       });
   },
 });

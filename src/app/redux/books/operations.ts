@@ -1,12 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 export const ITEMS_PER_PAGE = 2;
 
-// Інтерфейси для типізації
 interface Filters {
   title?: string;
   author?: string;
+}
+
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  imageUrl: string;
+  totalPages: number;
+}
+
+interface BookResponse {
+  results: Book[];
+  total: number;
 }
 
 interface GetBooksParams {
@@ -14,56 +26,47 @@ interface GetBooksParams {
   filters?: Filters;
 }
 
-interface BookResponse {
-  items: any[]; // Замініть any на інтерфейс вашої книги
-  total: number;
-}
+export const getBooks = createAsyncThunk(
+  "books/getBooks",
+  async (searchParams: GetBooksParams = { page: 1, filters: {} }) => {
+    const { page = 1, filters = {} as Filters } = searchParams;
 
-interface GetBooksResult {
-  items: any[]; // Замініть any на інтерфейс вашої книги
-  page: number;
-  total: number;
-}
+    const filtersBook = {
+      title: "title",
+      author: "author",
+    } as const;
 
-export const getBooks = createAsyncThunk
-  GetBooksResult,
-  GetBooksParams,
-  {
-    rejectValue: string;
-  }
-("books/getBooks", async ({ page = 1, filters = {} }, thunkAPI) => {
-  const filtersBook = {
-    title: "title",
-    author: "author",
-  };
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: ITEMS_PER_PAGE.toString(),
+    });
 
-  const params = new URLSearchParams({
-    page: page.toString(),
-    limit: ITEMS_PER_PAGE.toString(),
-  });
-
-  if (filters.title) {
-    params.append(filtersBook.title, filters.title);
-  }
-
-  if (filters.author) {
-    params.append(filtersBook.author, filters.author);
-  }
-
-  try {
-    const response = await axios.get<BookResponse>(`/books?${params}`);
-
-    return {
-      items: response.data.items,
-      page,
-      total: response.data.total || 0,
-    };
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || error.message || 'An error occurred'
-      );
+    if (filters?.title) {
+      queryParams.append(filtersBook.title, filters.title);
     }
-    return thunkAPI.rejectWithValue('An unexpected error occurred');
+
+    if (filters?.author) {
+      queryParams.append(filtersBook.author, filters.author);
+    }
+    try {
+      const response = await axios.get<BookResponse>(
+        `/books/recommend?${queryParams}`
+      );
+
+      console.log(response.data);
+
+      return {
+        items: response.data.results,
+        page,
+        total: response.data.total || 0,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || error.message || "An error occurred"
+        );
+      }
+      throw new Error("An unexpected error occurred");
+    }
   }
-});
+);
