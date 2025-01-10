@@ -1,13 +1,24 @@
-import { Field, Form, Formik } from "formik";
+"use client";
 
-const initialValues = {
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import css from "./Filters.module.css";
+
+interface FormValues {
+  title: string;
+  author: string;
+}
+
+const initialValues: FormValues = {
   title: "",
   author: "",
 };
 
-const handleSubmit = (action, values) => {
+const handleSubmit = (
+  values: FormValues,
+  actions: FormikHelpers<FormValues>
+) => {
   console.log(values);
-  action.resetForm();
+  actions.resetForm();
 };
 
 export default function Filters() {
@@ -15,9 +26,22 @@ export default function Filters() {
     <div>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         <Form>
-          <h2>Filters:</h2>
-          <Field placeholder="Book title:" />
-          <Field placeholder="The author:" />
+          <h2 className={css.title}>Filters:</h2>
+          <div className={css.fieldWrapper}>
+            <Field
+              className={css.input}
+              name="title"
+              placeholder="Book title:"
+            />
+            <Field
+              className={css.input}
+              name="author"
+              placeholder="The author:"
+            />
+          </div>
+          <button className={css.button} type="submit">
+            To apply
+          </button>
         </Form>
       </Formik>
     </div>

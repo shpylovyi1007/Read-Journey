@@ -16,9 +16,9 @@
 .user {
   width: 35px;
   height: 35px;
-  border: 1px solid var(--input-background);
+  border: 1px solid var(--border);
   border-radius: 50px;
-  background: var(--component-background);
+  background: var(--input-background);
   display: flex;
   justify-content: center;
   align-items: center;
